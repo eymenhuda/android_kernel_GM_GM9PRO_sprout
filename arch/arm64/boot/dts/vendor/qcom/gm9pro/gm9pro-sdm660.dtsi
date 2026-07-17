@@ -1,0 +1,30 @@
+#include "gm9pro-pm660.dtsi"
+#include "gm9pro-sdm660-audio.dtsi"
+#include "gm9pro-sdm660-mdss.dtsi"
+#include "gm9pro-sdm660-regulator.dtsi"
+#include "gm9pro-sdm660-pinctrl.dtsi"
+
+&firmware {
+	android {
+		vbmeta {
+			status = "disabled";
+		};
+
+		fstab {
+			vendor {
+				fsmgr_flags = "wait,slotselect";
+			};
+		};
+        };
+};
+
+&soc {
+	gpio_keys {
+		camera_focus {
+			gpios = <&tlmm 64 1>;
+			gpio-key,wakeup;
+		};
+
+		/delete-node/ camera_snapshot;
+	};
+};

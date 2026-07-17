@@ -320,6 +320,9 @@ sda660-cdp-external-codec-overlay.dtbo-base := sda660-pm660l.dtb
 
 sda660-rcm-external-codec-overlay.dtbo-base := sda660-pm660l.dtb
 else
+ifeq ($(CONFIG_MACH_GM_GM9PRO_SPROUT),y)
+dtb-$(CONFIG_MACH_GM_GM9PRO_SPROUT) := sdm660-mtp-gm9pro.dtb
+else
 dtb-$(CONFIG_ARCH_SDM660) += sdm660-sim.dtb \
 sdm660-internal-codec-cdp.dtb \
         sdm660-internal-codec-mtp.dtb \
@@ -463,6 +466,7 @@ sdm630-mtp.dtb \
         sda630-pm660a-mtp.dtb \
         sda630-pm660a-rcm.dtb \
         sda630-pm660a-qrd-hdk.dtb
+endif
 endif
 
 always		:= $(dtb-y)
