@@ -897,7 +897,9 @@ static void sec_ts_read_event(struct sec_ts_data *ts)
 					event_buff[3], event_buff[4], event_buff[5]);
 			break;
 		}
+#ifdef CONFIG_SEC_TS_WAKE_GESTURES
 out:
+#endif
 		curr_pos++;
 		remain_event_count--;
 	} while (remain_event_count >= 0);
