@@ -63,9 +63,8 @@
 				};
 			};
 		};
-	};
 
-                /* add pri_mi2s for tfa98xx smartpa */
+		/* add pri_mi2s for tfa98xx smartpa */
 		pri_mi2s_sck {
 			pri_mi2s_sck_sleep: pri_mi2s_sck_sleep {
 			    mux {
@@ -180,7 +179,8 @@
 					pins = "gpio15";
 					drive-strength = <8>;   /* 8 mA */
 					bias-disable;           /* NO PULL */
+					};
 				};
 			};
 		};
-};
+	};
