@@ -1124,7 +1124,7 @@ static void mdss_mdp_video_vsync_intr_done(void *arg)
 		return;
 	}
 
-	vsync_time = ktime_get();
+	vsync_time = ktime_sub_ns(ktime_get(), 50000);
 	ctl->vsync_cnt++;
 
 	ctl_flush_bits = mdss_mdp_ctl_read(ctl, MDSS_MDP_REG_CTL_FLUSH);
