@@ -7,6 +7,7 @@
 #include <linux/file.h>
 #include <linux/fs.h>
 #include <linux/uaccess.h>
+#include <linux/dma-buf.h>
 
 #include "ion.h"
 #include "ion_system_secure_heap.h"
@@ -19,6 +20,7 @@ union ion_ioctl_arg {
 	struct ion_allocation_data allocation;
 	struct ion_heap_query query;
 	struct ion_prefetch_data prefetch_data;
+	struct ion_flush_data flush_data;
 #ifdef CONFIG_ION_LEGACY
 	struct ion_fd_data fd;
 	struct ion_old_allocation_data old_allocation;
@@ -46,6 +48,10 @@ static int validate_ioctl_arg(unsigned int cmd, union ion_ioctl_arg *arg)
 static unsigned int ion_ioctl_dir(unsigned int cmd)
 {
 	switch (cmd) {
+	case ION_IOC_CLEAN_CACHES:
+	case ION_IOC_INV_CACHES:
+	case ION_IOC_CLEAN_INV_CACHES:
+		return _IOC_WRITE;
 #ifdef CONFIG_ION_LEGACY
 	case ION_IOC_FREE:
 		return _IOC_WRITE;
@@ -126,6 +132,30 @@ long ion_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 		if (ret)
 			return ret;
+		break;
+	}
+	case ION_IOC_CLEAN_CACHES:
+	case ION_IOC_INV_CACHES:
+	case ION_IOC_CLEAN_INV_CACHES:
+	{
+		struct dma_buf *dmabuf;
+		enum dma_data_direction direction;
+
+		dmabuf = dma_buf_get(data.flush_data.fd);
+		if (IS_ERR(dmabuf))
+			return PTR_ERR(dmabuf);
+
+		if (cmd == ION_IOC_CLEAN_CACHES)
+			direction = DMA_TO_DEVICE;
+		else if (cmd == ION_IOC_INV_CACHES)
+			direction = DMA_FROM_DEVICE;
+		else
+			direction = DMA_BIDIRECTIONAL;
+
+		ret = dma_buf_begin_cpu_access(dmabuf, direction);
+		if (!ret)
+			ret = dma_buf_end_cpu_access(dmabuf, direction);
+		dma_buf_put(dmabuf);
 		break;
 	}
 #ifdef CONFIG_ION_LEGACY
