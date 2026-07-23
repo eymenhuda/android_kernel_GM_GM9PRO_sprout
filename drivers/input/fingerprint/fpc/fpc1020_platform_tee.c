@@ -37,7 +37,9 @@
 #include <linux/regulator/consumer.h>
 #include <linux/notifier.h>
 #include <linux/fb.h>
-#include <linux/mdss_io_util.h>
+
+/* Weak stub - real implementation provided by mdss_fb if available */
+int __weak mdss_prim_panel_fb_unblank(int timeout) { return 0; }
 
 #ifdef CONFIG_TOUCHSCREEN_COMMON
 #include <linux/input.h>
@@ -201,7 +203,7 @@ static ssize_t clk_enable_set(struct device *dev,
 
 	return count;
 }
-static DEVICE_ATTR(clk_enable, 0200, NULL, clk_enable_set);
+static DEVICE_ATTR(clk_enable, 0660, NULL, clk_enable_set);
 
 static ssize_t fingerdown_wait_set(struct device *dev,
 	struct device_attribute *attr,
@@ -222,7 +224,7 @@ static ssize_t fingerdown_wait_set(struct device *dev,
 
 	return count;
 }
-static DEVICE_ATTR(fingerdown_wait, S_IWUSR, NULL, fingerdown_wait_set);
+static DEVICE_ATTR(fingerdown_wait, 0660, NULL, fingerdown_wait_set);
 
 /**
  * Will try to select the set of pins (GPIOS) defined in a pin control node of
@@ -275,7 +277,7 @@ static ssize_t pinctl_set(struct device *dev,
 
 	return rc ? rc : count;
 }
-static DEVICE_ATTR(pinctl_set, 0200, NULL, pinctl_set);
+static DEVICE_ATTR(pinctl_set, 0660, NULL, pinctl_set);
 
 static ssize_t regulator_enable_set(struct device *dev,
 	struct device_attribute *attr, const char *buf, size_t count)
@@ -301,7 +303,7 @@ static ssize_t regulator_enable_set(struct device *dev,
 
 	return rc ? rc : count;
 }
-static DEVICE_ATTR(regulator_enable, 0200, NULL, regulator_enable_set);
+static DEVICE_ATTR(regulator_enable, 0660, NULL, regulator_enable_set);
 
 static int hw_reset(struct fpc1020_data *fpc1020)
 {
@@ -346,7 +348,7 @@ static ssize_t hw_reset_set(struct device *dev,
 
 	return rc ? rc : count;
 }
-static DEVICE_ATTR(hw_reset, 0200, NULL, hw_reset_set);
+static DEVICE_ATTR(hw_reset, 0660, NULL, hw_reset_set);
 
 static void config_irq(struct fpc1020_data *fpc1020, bool enabled)
 {
@@ -498,7 +500,7 @@ static ssize_t device_prepare_set(struct device *dev,
 
 	return rc ? rc : count;
 }
-static DEVICE_ATTR(device_prepare, 0200, NULL, device_prepare_set);
+static DEVICE_ATTR(device_prepare, 0660, NULL, device_prepare_set);
 
 /**
  * sysfs node for controlling whether the driver is allowed
@@ -525,7 +527,7 @@ static ssize_t wakeup_enable_set(struct device *dev,
 	return count;
 #endif
 }
-static DEVICE_ATTR(wakeup_enable, 0200, NULL, wakeup_enable_set);
+static DEVICE_ATTR(wakeup_enable, 0660, NULL, wakeup_enable_set);
 
 /**
  * sysf node to check the interrupt status of the sensor, the interrupt
@@ -604,7 +606,7 @@ static ssize_t proximity_state_set(struct device *dev,
 
 	return count;
 }
-static DEVICE_ATTR(proximity_state, S_IWUSR, NULL, proximity_state_set);
+static DEVICE_ATTR(proximity_state, 0660, NULL, proximity_state_set);
 
 static struct attribute *attributes[] = {
 	&dev_attr_pinctl_set.attr,
