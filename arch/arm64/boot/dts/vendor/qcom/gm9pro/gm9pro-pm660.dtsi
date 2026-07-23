@@ -25,3 +25,18 @@
 	qcom,fg-sys-term-current = <300>;
 	qcom,fg-jeita-thresholds = <0 10 45 52>;
 };
+
+&pm660_haptics {
+	/delete-property/ qcom,int-pwm-freq-khz;
+	/delete-property/ qcom,brake-pattern;
+	/delete-property/ qcom,lra-high-z;
+	/delete-property/ qcom,lra-auto-res-mode;
+	/delete-property/ qcom,lra-calibrate-at-eop;
+	/delete-property/ qcom,correct-lra-drive-freq;
+	/delete-property/ qcom,en-brake;
+
+	qcom,actuator-type = "erm";
+	qcom,play-mode = "direct";
+	qcom,wave-shape = "square";
+	qcom,vmax-mv = <3300>;
+};
