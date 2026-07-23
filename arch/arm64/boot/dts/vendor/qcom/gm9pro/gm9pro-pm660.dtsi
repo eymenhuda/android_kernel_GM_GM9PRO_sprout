@@ -16,14 +16,25 @@
 	qcom,usb-icl-ua = <3000000>;
 	qcom,otg-cl-ua = <1000000>;
 	qcom,fcc-max-ua = <3000000>;
-	qcom,fv-max-uv  = <4400000>;
+	qcom,fv-max-uv = <4400000>;
+	qcom,auto-recharge-soc;
+	qcom,autoadjust-vfloat;
+	qcom,thermal-mitigation = <2200000 2100000 1800000 1400000 1000000 600000 0>;
+	qcom,float-option = <1>;
+	qcom,usb_therm-vadc = <&pm660_vadc>;
+	qcom,protect-temp-by-d-work;
 };
 
 &pm660_fg {
 	qcom,fg-cutoff-voltage = <3400>;
+	qcom,fg-empty-voltage = <3000>;
 	qcom,fg-chg-term-current = <150>;
-	qcom,fg-sys-term-current = <300>;
-	qcom,fg-jeita-thresholds = <0 10 45 52>;
+	qcom,fg-sys-term-current = <(-170)>;
+	qcom,fg-jeita-thresholds = <0 10 45 55>;
+	qcom,fg-recharge-soc-thr = <98>;
+	qcom,fg-auto-recharge-soc;
+	qcom,hold-soc-while-full;
+	qcom,linearize-soc;
 };
 
 &pm660_haptics {
