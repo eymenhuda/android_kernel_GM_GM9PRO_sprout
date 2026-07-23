@@ -1230,17 +1230,13 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 	 * 210-290 == Button 2
 	 * 360-680 == Button 3
 	 */
-#ifdef CONFIG_MACH_LONGCHEER
-	btn_low[0] = 75;
-	btn_high[0] = 75;
+#ifdef CONFIG_MACH_GM_GM9PRO_SPROUT
 	btn_low[1] = 225;
 	btn_high[1] = 225;
 	btn_low[2] = 450;
 	btn_high[2] = 450;
 	btn_low[3] = 500;
 	btn_high[3] = 500;
-	btn_low[4] = 500;
-	btn_high[4] = 500;
 #else
 	btn_low[0] = 75;
 	btn_high[0] = 75;
@@ -2682,11 +2678,7 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 #ifdef CONFIG_SND_SOC_TFA98XX
 		.codecs = tfa98xx_codecs,
 		.num_codecs = 2,
-#else
-		.codec_name = "msm-stub-codec.1",
-		.codec_dai_name = "msm-stub-rx",
-#endif
-#ifdef CONFIG_SND_SOC_TAS2557
+#elif defined(CONFIG_SND_SOC_TAS2557)
 		.codec_name = "tas2557.6-004c",
 		.codec_dai_name = "tas2557 ASI1",
 #elif defined(CONFIG_SND_SOC_MAX98937)
@@ -2712,11 +2704,7 @@ static struct snd_soc_dai_link msm_mi2s_be_dai_links[] = {
 #ifdef CONFIG_SND_SOC_TFA98XX
 		.codecs = tfa98xx_codecs,
 		.num_codecs = 2,
-#else
-		.codec_name = "msm-stub-codec.1",
-		.codec_dai_name = "msm-stub-tx",
-#endif
-#ifdef CONFIG_SND_SOC_TAS2557
+#elif defined(CONFIG_SND_SOC_TAS2557)
 		.codec_name = "tas2557.6-004c",
 		.codec_dai_name = "tas2557 ASI1",
 #elif defined(CONFIG_SND_SOC_MAX98937)
