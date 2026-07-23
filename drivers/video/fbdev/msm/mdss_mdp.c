@@ -567,6 +567,10 @@ static int mdss_mdp_bus_scale_set_quota(u64 ab_quota_rt, u64 ab_quota_nrt,
 	u64 ib_quota[MAX_AXI_PORT_COUNT] = {0, 0};
 	int rc;
 
+	/* Force max memory bandwidth for display to prevent stutter */
+	ab_quota_rt = max_t(u64, ab_quota_rt, 6400000000ULL);
+	ib_quota_rt = max_t(u64, ib_quota_rt, 6400000000ULL);
+
 	if (mdss_res->bus_hdl < 1) {
 		pr_err("invalid bus handle %d\n", mdss_res->bus_hdl);
 		return -EINVAL;
@@ -1295,7 +1299,8 @@ void mdss_mdp_set_clk_rate(unsigned long rate, bool locked)
 	struct clk *clk = mdss_mdp_get_clk(MDSS_CLK_MDP_CORE);
 	unsigned long min_clk_rate, curr_clk_rate;
 
-	min_clk_rate = max(rate, mdata->perf_tune.min_mdp_clk);
+	/* Lock MDP core clock to max frequency to prevent rendering stutter */
+	min_clk_rate = mdata->max_mdp_clk_rate;
 
 	if (clk) {
 
@@ -2957,9 +2962,10 @@ static int mdss_mdp_probe(struct platform_device *pdev)
 	int num_of_display_on = 0;
 	int i = 0;
 
+	/* Bypass ENOTSUPP early exit to allow FBDEV to initialize */
 	if (!pdev->dev.of_node) {
 		pr_err("MDP driver only supports device tree probe\n");
-		return -ENOTSUPP;
+		return -ENODEV;
 	}
 
 	if (mdss_res) {
