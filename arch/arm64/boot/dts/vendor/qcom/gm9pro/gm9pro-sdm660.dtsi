@@ -40,3 +40,7 @@
         };
     };
 };
+
+&pmic_analog_codec {
+	qcom,wsa-switch-enable-gpio = <&tlmm 56 0>;
+};
