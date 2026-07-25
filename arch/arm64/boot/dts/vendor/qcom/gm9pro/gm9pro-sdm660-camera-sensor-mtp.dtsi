@@ -38,6 +38,16 @@
 		gpio = <&tlmm 30 0>;
 		vin-supply = <&pm660_s5>;
 	};
+
+	cam_vaf_gpio_regulator: cam_vaf_fixed_regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_vaf_gpio_regulator";
+		regulator-min-microvolt = <2800000>;
+		regulator-max-microvolt = <2800000>;
+		enable-active-high;
+		gpio = <&tlmm 28 0>;
+		vin-supply = <&pm660l_bob>;
+	};
 };
 
 &cci {
@@ -55,11 +65,11 @@
 		reg = <0x0>;
 		compatible = "qcom,actuator";
 		qcom,cci-master = <0>;
-		gpios = <&tlmm 28 0>;
-		qcom,gpio-vaf = <0>;
-		qcom,gpio-req-tbl-num = <0>;
-		qcom,gpio-req-tbl-flags = <0>;
-		qcom,gpio-req-tbl-label = "cam_vaf";
+		cam_vaf-supply = <&cam_vaf_gpio_regulator>;
+		qcom,cam-vreg-name = "cam_vaf";
+		qcom,cam-vreg-min-voltage = <2800000>;
+		qcom,cam-vreg-max-voltage = <2800000>;
+		qcom,cam-vreg-op-mode = <100000>;
 	};
 
 	eeprom0: qcom,eeprom@0 {
@@ -235,16 +245,16 @@
 		qcom,csid-sd-index = <1>;
 		qcom,mount-angle = <90>;
 		qcom,led-flash-src = <&led_flash0>;
-		/* Temporarily disable the unresponsive AK7374 actuator for validation. */
-		// qcom,actuator-src = <&actuator0>;
+		qcom,actuator-src = <&actuator0>;
 		qcom,eeprom-src = <&eeprom2>;
 		cam_vio-supply = <&pm660_l11>;
 		cam_vana-supply = <&cam_rear_avdd_gpio_regulator>;
 		cam_vdig-supply = <&cam_rear_dvdd_gpio_regulator>;
-		qcom,cam-vreg-name = "cam_vio", "cam_vana", "cam_vdig";
-		qcom,cam-vreg-min-voltage = <1780000 0 0>;
-		qcom,cam-vreg-max-voltage = <1950000 0 0>;
-		qcom,cam-vreg-op-mode = <105000 0 0>;
+		cam_vaf-supply = <&cam_vaf_gpio_regulator>;
+		qcom,cam-vreg-name = "cam_vio", "cam_vana", "cam_vdig", "cam_vaf";
+		qcom,cam-vreg-min-voltage = <1780000 0 0 2800000>;
+		qcom,cam-vreg-max-voltage = <1950000 0 0 2800000>;
+		qcom,cam-vreg-op-mode = <105000 0 0 100000>;
 		qcom,gpio-no-mux = <0>;
 		pinctrl-names = "cam_default", "cam_suspend";
 		pinctrl-0 = <&cam_sensor_mclk0_active
