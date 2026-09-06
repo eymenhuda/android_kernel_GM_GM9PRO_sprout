@@ -36,7 +36,7 @@
 #ifdef CONFIG_MACH_LONGCHEER
 #define CCI_TIMEOUT msecs_to_jiffies(800)
 #else
-#define CCI_TIMEOUT msecs_to_jiffies(100)
+#define CCI_TIMEOUT msecs_to_jiffies(500)
 #endif
 
 /* TODO move this somewhere else */
