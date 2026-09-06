@@ -7,6 +7,8 @@
 		enable-active-high;
 		gpio = <&tlmm 31 0>;
 		vin-supply = <&pm660l_bob>;
+		/delete-property/ pinctrl-names;
+		/delete-property/ pinctrl-0;
 	};
 
 	cam_rear_avdd_gpio_regulator: cam_rear_avdd_fixed_regulator {
@@ -27,6 +29,8 @@
 		enable-active-high;
 		gpio = <&tlmm 29 0>;
 		vin-supply = <&pm660_s5>;
+		/delete-property/ pinctrl-names;
+		/delete-property/ pinctrl-0;
 	};
 
 	cam_rear_dvdd_gpio_regulator: cam_rear_dvdd_fixed_regulator {
@@ -37,6 +41,8 @@
 		enable-active-high;
 		gpio = <&tlmm 30 0>;
 		vin-supply = <&pm660_s5>;
+		/delete-property/ pinctrl-names;
+		/delete-property/ pinctrl-0;
 	};
 
 	cam_vaf_gpio_regulator: cam_vaf_fixed_regulator {
